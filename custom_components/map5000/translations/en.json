@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MAP 5000 - by MK",
+        "description": "Set up the connection to the MAP 5000 control panel.",
+        "data": {
+          "host": "IP address / hostname",
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to the MAP 5000."
+    },
+    "abort": {
+      "already_configured": "This MAP 5000 is already configured."
+    }
+  }
+}

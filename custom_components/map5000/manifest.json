@@ -1,0 +1,12 @@
+{
+  "domain": "map5000",
+  "name": "MAP 5000 - by MK",
+  "version": "0.1.0",
+  "codeowners": [
+    "@TheSeriesOne"
+  ],
+  "integration_type": "hub",
+  "iot_class": "local_push",
+  "config_flow": true,
+  "requirements": []
+}

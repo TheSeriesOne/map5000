@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "MAP 5000 - by MK",
+        "description": "Verbindung zur MAP 5000 Zentrale einrichten.",
+        "data": {
+          "host": "IP-Adresse / Hostname",
+          "username": "Benutzername",
+          "password": "Passwort"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Verbindung zur MAP 5000 konnte nicht hergestellt werden."
+    },
+    "abort": {
+      "already_configured": "Diese MAP 5000 ist bereits eingerichtet."
+    }
+  }
+}

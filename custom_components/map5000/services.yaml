@@ -1,0 +1,9 @@
+sperren:
+  target:
+    entity:
+      domain: binary_sensor
+
+entsperren:
+  target:
+    entity:
+      domain: binary_sensor
