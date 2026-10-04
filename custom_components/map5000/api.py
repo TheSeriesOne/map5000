@@ -108,6 +108,53 @@ class Map5000Api:
             timeout=70,
         )
 
+    async def get_incident(self, incident_url):
+        """MAP5000-Incident direkt abrufen."""
+        return await self._curl("GET", incident_url, timeout=10)
+
+
+    async def silence_incidents(self):
+        """Signalgeber aktiver MAP5000-Incidents stummschalten."""
+        return await self._curl(
+            "POST",
+            "/inc",
+            payload={"@cmd": "SILENCE"},
+            timeout=20,
+        )
+
+
+    async def start_walktest(self):
+        """Zentralen MAP5000-Begehtest starten."""
+        return await self._curl(
+            "POST",
+            "/areas",
+            payload={
+                "@cmd": "STARTWALKTEST",
+                "includedPoints": "ALL",
+            },
+            timeout=20,
+        )
+
+    async def stop_walktest(self):
+        """Zentralen MAP5000-Begehtest beenden."""
+        return await self._curl(
+            "POST",
+            "/areas",
+            payload={"@cmd": "STOPWALKTEST"},
+            timeout=20,
+        )
+
+
+    async def handle_incidents(self):
+        """Offene MAP5000-Incidents quittieren / behandeln."""
+        return await self._curl(
+            "POST",
+            "/inc",
+            payload={"@cmd": "HANDLE"},
+            timeout=20,
+        )
+
+
     async def get_config(self):
         """Komplette MAP5000-Konfiguration abrufen."""
         return await self._curl("GET", "/config", timeout=20)

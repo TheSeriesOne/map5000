@@ -1,6 +1,6 @@
 DOMAIN = "map5000"
 
-PLATFORMS = ["binary_sensor", "alarm_control_panel"]
+PLATFORMS = ["binary_sensor", "alarm_control_panel", "button"]
 
 CONF_HOST = "host"
 CONF_USERNAME = "username"
