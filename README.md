@@ -169,3 +169,8 @@ Future development may include:
 ## License
 
 MIT License
+
+## Changelog
+
+See `CHANGELOG.md` for release history, new features, improvements
+and bug fixes.
