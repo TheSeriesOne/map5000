@@ -16,11 +16,14 @@ from .const import (
 
 SERVICE_SPERREN = "sperren"
 SERVICE_ENTSPERREN = "entsperren"
+SERVICE_AUSGANG_SPERREN = "ausgang_sperren"
+SERVICE_AUSGANG_ENTSPERREN = "ausgang_entsperren"
 
 
 async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     """MAP5000-Aktionen registrieren."""
 
+    # Points / Melder
     service.async_register_platform_entity_service(
         hass,
         DOMAIN,
@@ -39,10 +42,11 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         func="async_entsperren",
     )
 
+    # Outputs
     service.async_register_platform_entity_service(
         hass,
         DOMAIN,
-        SERVICE_SPERREN,
+        SERVICE_AUSGANG_SPERREN,
         entity_domain=SWITCH_DOMAIN,
         schema={},
         func="async_sperren",
@@ -51,7 +55,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     service.async_register_platform_entity_service(
         hass,
         DOMAIN,
-        SERVICE_ENTSPERREN,
+        SERVICE_AUSGANG_ENTSPERREN,
         entity_domain=SWITCH_DOMAIN,
         schema={},
         func="async_entsperren",
@@ -78,7 +82,6 @@ async def async_setup_entry(
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
 
     return True
 

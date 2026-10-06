@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.3.1
+
+### Fixed
+- Fixed a service registration conflict between MAP points and outputs.
+- Point lock/unlock actions work correctly again.
+- Output lock/unlock now use dedicated actions:
+  - `map5000.ausgang_sperren`
+  - `map5000.ausgang_entsperren`
+- Prevented the output service registration from overriding the point service registration.
+
+### Tested
+- Point lock
+- Point unlock
+- Output lock
+- Output unlock
+- Output ON/OFF remains functional
+
+
 All notable changes to the MAP 5000 Home Assistant integration
 are documented in this file.
 

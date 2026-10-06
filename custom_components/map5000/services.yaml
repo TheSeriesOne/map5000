@@ -1,13 +1,27 @@
 sperren:
+  name: Melder sperren
+  description: Sperrt einen MAP5000-Melder.
   target:
     entity:
-      domain:
-        - binary_sensor
-        - switch
+      domain: binary_sensor
 
 entsperren:
+  name: Melder entsperren
+  description: Entsperrt einen MAP5000-Melder.
   target:
     entity:
-      domain:
-        - binary_sensor
-        - switch
+      domain: binary_sensor
+
+ausgang_sperren:
+  name: Ausgang sperren
+  description: Sperrt einen MAP5000-Ausgang.
+  target:
+    entity:
+      domain: switch
+
+ausgang_entsperren:
+  name: Ausgang entsperren
+  description: Entsperrt einen MAP5000-Ausgang.
+  target:
+    entity:
+      domain: switch
