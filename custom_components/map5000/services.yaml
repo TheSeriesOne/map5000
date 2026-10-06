@@ -1,9 +1,13 @@
 sperren:
   target:
     entity:
-      domain: binary_sensor
+      domain:
+        - binary_sensor
+        - switch
 
 entsperren:
   target:
     entity:
-      domain: binary_sensor
+      domain:
+        - binary_sensor
+        - switch

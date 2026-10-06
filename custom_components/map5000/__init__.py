@@ -1,4 +1,5 @@
 from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
+from homeassistant.components.switch import DOMAIN as SWITCH_DOMAIN
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import service
@@ -38,6 +39,24 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
         func="async_entsperren",
     )
 
+    service.async_register_platform_entity_service(
+        hass,
+        DOMAIN,
+        SERVICE_SPERREN,
+        entity_domain=SWITCH_DOMAIN,
+        schema={},
+        func="async_sperren",
+    )
+
+    service.async_register_platform_entity_service(
+        hass,
+        DOMAIN,
+        SERVICE_ENTSPERREN,
+        entity_domain=SWITCH_DOMAIN,
+        schema={},
+        func="async_entsperren",
+    )
+
     return True
 
 
@@ -59,6 +78,8 @@ async def async_setup_entry(
     }
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+
     return True
 
 

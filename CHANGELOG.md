@@ -5,6 +5,86 @@ are documented in this file.
 
 ---
 
+## v0.3.0
+
+### New features
+
+#### Doors and windows
+
+- Added automatic Home Assistant device-class selection for MAP
+  points.
+- Point names containing `Tür` or `Tuer` are exposed as Door binary
+  sensors.
+- Point names containing `Fenster` are exposed as Window binary
+  sensors.
+- Other points continue to use the Opening device class.
+
+#### MAP outputs
+
+- MAP outputs are now exposed as native Home Assistant switch
+  entities.
+- Added output ON support using the OII `ON` command.
+- Added output OFF support using the OII `OFF` command.
+- Added live output state synchronization through the existing central
+  OII subscription.
+- Added enabled / disabled state information.
+- Added output OII operating-state information.
+- Added output support for:
+  - `map5000.sperren`
+  - `map5000.entsperren`
+- Output disable / enable has been tested with outputs assigned to a
+  MAP area.
+
+#### Internal programs
+
+- Added automatic discovery through `/internalprograms`.
+- Added internal programs as Home Assistant switch entities.
+- Added activation using the OII `ACTIVATE` command.
+- Added deactivation using the OII `DEACTIVATE` command.
+- Added active-state synchronization after Home Assistant commands.
+- Added discovered internal-program URLs to the central OII
+  subscription.
+- Added handling for internal-program state-change events.
+- Added fallback entity names such as `Internprogramm 1` when no
+  descriptive name is available through the used OII resource.
+
+### Architecture and stability
+
+- Outputs are no longer created as binary-sensor entities.
+- Output URLs remain part of the central MAP OII subscription.
+- Output switches receive state changes through Home Assistant's
+  internal MAP event distribution.
+- Internal programs use the same central OII subscription instead of
+  creating an additional subscription.
+- Removed obsolete output state handling from the binary-sensor
+  entity implementation.
+- Removed duplicate switch service registration.
+- Removed unused integration code.
+- Preserved the existing incident lifecycle and subscription recovery
+  architecture.
+
+### Tested
+
+v0.3.0 has been tested with a real Bosch MAP 5000 installation,
+including:
+
+- Point state changes
+- Door / window device classes
+- Point disable / enable
+- Output ON / OFF
+- Output disable / enable
+- Internal-program activation / deactivation
+- Area arm / disarm
+- Existing central OII event subscription
+- MAP integration startup after the v0.3.0 changes
+
+Internal-program resources have been successfully added to the central
+
+Some MAP functions depend on the configuration, permissions and
+capabilities of the individual installation.
+
+---
+
 ## v0.2.0
 
 ### New features

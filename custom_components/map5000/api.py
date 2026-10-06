@@ -1,7 +1,6 @@
 import asyncio
 import json
 import logging
-import re
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -192,3 +191,30 @@ class Map5000Api:
     async def enable_point(self, point_url):
         """Melder entsperren."""
         return await self.send_command(point_url, "ENABLE")
+
+    async def turn_on_output(self, output_url):
+        """MAP5000-Ausgang einschalten."""
+        return await self.send_command(output_url, "ON")
+
+    async def turn_off_output(self, output_url):
+        """MAP5000-Ausgang ausschalten."""
+        return await self.send_command(output_url, "OFF")
+
+    async def get_internal_programs(self):
+        """Konfigurierte MAP5000-Internprogramme lesen."""
+        return await self._curl("GET", "/internalprograms")
+
+    async def get_internal_program(self, program_number):
+        """Ein einzelnes MAP5000-Internprogramm lesen."""
+        return await self._curl(
+            "GET",
+            f"/internalprogram/{program_number}",
+        )
+
+    async def activate_internal_program(self, program_url):
+        """MAP5000-Internprogramm aktivieren."""
+        return await self.send_command(program_url, "ACTIVATE")
+
+    async def deactivate_internal_program(self, program_url):
+        """MAP5000-Internprogramm deaktivieren."""
+        return await self.send_command(program_url, "DEACTIVATE")

@@ -112,11 +112,21 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     entities = []
     entities_by_url = {}
+    subscription_urls = []
 
     for siid, device_config in unique_devices.items():
         device_url = "/" + siid
         name = device_config.get("name") or siid
         device_type = get_device_type(siid)
+
+        # Alle unterstützten Objekte bleiben Teil der zentralen
+        # OII-Subscription, auch wenn sie auf einer anderen
+        # Home-Assistant-Plattform dargestellt werden.
+        subscription_urls.append(device_url)
+
+        # Outputs werden ab v0.3.0 als echte HA-Switches angelegt.
+        if device_type == "Output":
+            continue
 
         try:
             state = await api.get_point(device_url)
@@ -155,7 +165,15 @@ async def async_setup_entry(hass, entry, async_add_entities):
 
     async_add_entities([connectivity_entity, *entities])
 
-    urls = list(entities_by_url)
+    urls = list(dict.fromkeys(subscription_urls))
+
+    # Internprogramme ebenfalls über dieselbe zentrale
+    # MAP-Live-Subscription überwachen.
+    internal_program_data = await api.get_internal_programs()
+    for program_state in internal_program_data.get("list", []):
+        program_url = program_state.get("@self")
+        if isinstance(program_url, str) and program_url not in urls:
+            urls.append(program_url)
 
     # Auch Bereiche über dieselbe MAP-Live-Subscription überwachen.
     area_data = await api.get_point("/areas")
@@ -411,7 +429,14 @@ class Map5000Device(BinarySensorEntity):
         self._device_type = device_type
 
         if self._device_type == "Point":
-            self._attr_device_class = BinarySensorDeviceClass.OPENING
+            name_lower = (name or "").lower()
+
+            if "tür" in name_lower or "tuer" in name_lower:
+                self._attr_device_class = BinarySensorDeviceClass.DOOR
+            elif "fenster" in name_lower:
+                self._attr_device_class = BinarySensorDeviceClass.WINDOW
+            else:
+                self._attr_device_class = BinarySensorDeviceClass.OPENING
         else:
             self._attr_device_class = BinarySensorDeviceClass.PROBLEM
         self._api = api
@@ -419,7 +444,6 @@ class Map5000Device(BinarySensorEntity):
         self._active = bool(state.get("active", False))
         self._enabled = bool(state.get("enabled", True))
         self._bypassed = bool(state.get("bypassed", False))
-        self._output_on = bool(state.get("on", False))
         self._activated = state.get("activated")
         self._op_state = state.get("opState", "OK")
 
@@ -429,8 +453,6 @@ class Map5000Device(BinarySensorEntity):
     def map_state(self):
         if self._device_type == "Point":
             return "Offen" if self._active else "Geschlossen"
-        if self._device_type == "Output":
-            return "Ein" if self._output_on else "Aus"
         return "Ruhe" if self._op_state == "OK" else "Störung"
 
     @property
@@ -449,16 +471,12 @@ class Map5000Device(BinarySensorEntity):
         if self._activated is not None:
             attributes["Aktiviert"] = "Ja" if self._activated else "Nein"
 
-        if self._device_type == "Output":
-            attributes["Ausgang"] = "Ein" if self._output_on else "Aus"
 
         return attributes
 
     def _update_binary_state(self):
         if self._device_type == "Point":
             self._attr_is_on = self._active
-        elif self._device_type == "Output":
-            self._attr_is_on = self._output_on
         else:
             self._attr_is_on = self._op_state != "OK"
 
@@ -512,9 +530,6 @@ class Map5000Device(BinarySensorEntity):
             self._activated = bool(evt["activated"])
             changed = True
 
-        if "on" in evt:
-            self._output_on = bool(evt["on"])
-            changed = True
 
         if "opState" in evt:
             self._op_state = evt["opState"]
