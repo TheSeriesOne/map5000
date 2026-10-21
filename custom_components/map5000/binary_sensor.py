@@ -143,6 +143,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
             siid=siid,
             device_url=device_url,
             device_type=device_type,
+            bosch_type=device_config.get("type", ""),
             state=state,
             api=api,
         )
@@ -419,6 +420,7 @@ class Map5000Device(BinarySensorEntity):
         siid,
         device_url,
         device_type,
+        bosch_type,
         state,
         api,
     ):
@@ -427,16 +429,18 @@ class Map5000Device(BinarySensorEntity):
         self._siid = siid
         self._device_url = device_url
         self._device_type = device_type
-
+        self._bosch_type = bosch_type
         if self._device_type == "Point":
-            name_lower = (name or "").lower()
-
-            if "tür" in name_lower or "tuer" in name_lower:
-                self._attr_device_class = BinarySensorDeviceClass.DOOR
-            elif "fenster" in name_lower:
-                self._attr_device_class = BinarySensorDeviceClass.WINDOW
+            if bosch_type == "POINT.PIR":
+                self._attr_device_class = BinarySensorDeviceClass.MOTION
             else:
-                self._attr_device_class = BinarySensorDeviceClass.OPENING
+                name_lower = (name or "").lower()
+                if "tür" in name_lower or "tuer" in name_lower:
+                    self._attr_device_class = BinarySensorDeviceClass.DOOR
+                elif "fenster" in name_lower:
+                    self._attr_device_class = BinarySensorDeviceClass.WINDOW
+                else:
+                    self._attr_device_class = BinarySensorDeviceClass.OPENING
         else:
             self._attr_device_class = BinarySensorDeviceClass.PROBLEM
         self._api = api

@@ -1,3 +1,18 @@
+## [0.3.2] - 2026-10-21
+
+### Added
+- Automatic Bosch OII device type detection for PIR motion detectors.
+- POINT.PIR devices are now exposed with Home Assistant device class `motion`.
+- Device classification uses the Bosch `type` field from `/config`, not the detector name.
+
+### Changed
+- Existing Point classification is preserved for non-PIR devices.
+- PIR motion detectors now display the correct Home Assistant states.
+
+### Verified
+- Tested with Bosch LSN motion detector `1.1.Point.1001.6`.
+- Live state changes between "Frei" and "Erkannt" confirmed.
+- Existing OII event handling remains unchanged.
 # Changelog
 
 ## 0.3.1
